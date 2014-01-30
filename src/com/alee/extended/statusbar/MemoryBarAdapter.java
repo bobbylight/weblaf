@@ -15,28 +15,31 @@
  * along with WebLookAndFeel library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.alee.laf.button;
-
-import javax.swing.*;
-import javax.swing.plaf.ComponentUI;
+package com.alee.extended.statusbar;
 
 /**
- * User: mgarin Date: 06.07.11 Time: 11:33
+ * Adapter for MemoryBarListener.
+ *
+ * @author Mikle Garin
  */
 
-public class WebToggleButtonUI extends WebButtonUI
+public abstract class MemoryBarAdapter implements MemoryBarListener
 {
-    private final static String propertyPrefix = "ToggleButton" + ".";
-
-    @SuppressWarnings ("UnusedParameters")
-    public static ComponentUI createUI ( final JComponent c )
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void gcCalled ()
     {
-        return new WebToggleButtonUI ();
+        // Do nothing by default
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected String getPropertyPrefix ()
+    public void gcCompleted ()
     {
-        return propertyPrefix;
+        // Do nothing by default
     }
 }

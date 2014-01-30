@@ -118,10 +118,10 @@ public final class SwingUtils
      */
     public static boolean isPreserveBorders ( final JComponent component )
     {
-        if ( getHonorUserBorders ( component ) ) {
-            Border border = component.getBorder ();
-            return border!=null && !( component.getBorder () instanceof UIResource ) &&
-                    !( component.getBorder () instanceof WeblafBorder );
+        if ( getHonorUserBorders ( component ) )
+        {
+            final Border border = component.getBorder ();
+            return border != null && !( border instanceof UIResource ) && !( border instanceof WeblafBorder );
         }
         return false;
     }

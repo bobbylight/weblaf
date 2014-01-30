@@ -18,7 +18,6 @@
 package com.alee.utils.laf;
 
 import javax.swing.plaf.BorderUIResource;
-
 import java.awt.*;
 
 /**

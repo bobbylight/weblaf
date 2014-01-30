@@ -26,7 +26,7 @@ import javax.swing.plaf.ComponentUI;
 
 public class WebTextPaneUI extends WebEditorPaneUI
 {
-    @SuppressWarnings ("UnusedParameters")
+    @SuppressWarnings ( "UnusedParameters" )
     public static ComponentUI createUI ( final JComponent c )
     {
         return new WebTextPaneUI ();

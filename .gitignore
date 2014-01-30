@@ -6,3 +6,7 @@ target
 .idea
 *.iml
 
+# Eclipse artifacts for those crazies still using it
+bin
+dist
+

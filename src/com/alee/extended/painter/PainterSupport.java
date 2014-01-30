@@ -17,10 +17,11 @@
 
 package com.alee.extended.painter;
 
+import com.alee.laf.WebLookAndFeel;
 import com.alee.utils.LafUtils;
-import com.alee.utils.swing.BorderMethods;
 
 import javax.swing.*;
+import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -40,16 +41,20 @@ public final class PainterSupport
 
     /**
      * Installs painter into the specified component.
+     * It is highly recommended to call this method only from EDT.
      *
      * @param component component painter is applied to
      * @param painter   painter to install
      */
     public static void installPainter ( final JComponent component, final Painter painter )
     {
+        // Simply ignore this call if empty painter is set or component doesn't exist
         if ( component == null || painter == null )
         {
             return;
         }
+
+        // Installing painter
         Map<Painter, PainterListener> listeners = installedPainters.get ( component );
         if ( listeners == null )
         {
@@ -58,24 +63,53 @@ public final class PainterSupport
         }
         if ( !installedPainters.containsKey ( painter ) )
         {
+            // Installing painter
+            painter.install ( component );
+
+            // Applying initial component settings
+            LookAndFeel.installProperty ( component, WebLookAndFeel.OPAQUE_PROPERTY, painter.isOpaque ( component ) );
+
+            // Updating border
+            LafUtils.updateBorder ( component );
+
+            // Creating weak references to use them inside the listener
+            // Otherwise we will force it to keep strong reference to component and painter if we use them directly
+            final WeakReference<JComponent> c = new WeakReference<JComponent> ( component );
+            final WeakReference<Painter> p = new WeakReference<Painter> ( painter );
+
+            // Adding painter listener
             final PainterListener listener = new PainterListener ()
             {
                 @Override
                 public void repaint ()
                 {
-                    component.repaint ();
+                    // Forcing component to be repainted
+                    c.get ().repaint ();
+                }
+
+                @Override
+                public void repaint ( final int x, final int y, final int width, final int height )
+                {
+                    // Forcing component to be repainted
+                    c.get ().repaint ( x, y, width, height );
                 }
 
                 @Override
                 public void revalidate ()
                 {
-                    final BorderMethods borderMethods = LafUtils.getBorderMethods ( component );
-                    if ( borderMethods != null )
-                    {
-                        // todo Move to separate "updateBorder" method in PainterListener
-                        borderMethods.updateBorder ();
-                    }
-                    component.revalidate ();
+                    // todo Move to separate "updateBorder" method in PainterListener?
+                    // Forcing border updates
+                    LafUtils.updateBorder ( c.get () );
+
+                    // Forcing layout updates
+                    c.get ().revalidate ();
+                }
+
+                @Override
+                public void updateOpacity ()
+                {
+                    // Updating component opacity according to painter
+                    c.get ().setOpaque ( p.get ().isOpaque ( c.get () ) );
                 }
             };
             painter.addPainterListener ( listener );
@@ -85,6 +119,7 @@ public final class PainterSupport
 
     /**
      * Uninstalls painter from the specified component.
+     * It is highly recommended to call this method only from EDT.
      *
      * @param component component painter is uninstalled from
      * @param painter   painter to uninstall
@@ -98,6 +133,10 @@ public final class PainterSupport
         final Map<Painter, PainterListener> listeners = installedPainters.get ( component );
         if ( listeners != null )
         {
+            // Uninstalling painter
+            painter.uninstall ( component );
+
+            // Removing painter listener
             listeners.remove ( painter );
         }
     }

@@ -98,16 +98,16 @@ public class WebButtonUI extends BasicButtonUI implements ShapeProvider, SwingCo
     protected AbstractButton button = null;
 
     // Cached old values from button to restore on LAF change.
-    private boolean oldFocusPainted;
-    private boolean oldContentAreaFilled;
-    private boolean oldBorderPainted;
-    private boolean oldFocusable;
+    protected boolean oldFocusPainted;
+    protected boolean oldContentAreaFilled;
+    protected boolean oldBorderPainted;
+    protected boolean oldFocusable;
 
     protected MouseAdapter mouseAdapter;
     protected AncestorListener ancestorListener;
     protected PropertyChangeListener propertyChangeListener;
 
-    @SuppressWarnings ( "UnusedParameters" )
+    @SuppressWarnings ("UnusedParameters")
     public static ComponentUI createUI ( final JComponent c )
     {
         return new WebButtonUI ();
@@ -121,6 +121,12 @@ public class WebButtonUI extends BasicButtonUI implements ShapeProvider, SwingCo
         // Saving button to local variable
         button = ( AbstractButton ) c;
 
+        // Saving old button settings
+        oldFocusPainted = button.isFocusPainted ();
+        oldContentAreaFilled = button.isContentAreaFilled ();
+        oldBorderPainted = button.isBorderPainted ();
+        oldFocusable = button.isFocusable ();
+
         // Default settings
         SwingUtils.setOrientation ( button );
         oldFocusPainted = button.isFocusPainted();
@@ -131,7 +137,7 @@ public class WebButtonUI extends BasicButtonUI implements ShapeProvider, SwingCo
         button.setContentAreaFilled ( false );
         button.setBorderPainted ( false );
         button.setFocusable ( true );
-        LookAndFeel.installProperty( button, "opaque", Boolean.FALSE );
+        LookAndFeel.installProperty ( button, WebLookAndFeel.OPAQUE_PROPERTY, Boolean.FALSE );
         PainterSupport.installPainter ( button, this.painter );
 
         // Updating border
@@ -440,10 +446,10 @@ public class WebButtonUI extends BasicButtonUI implements ShapeProvider, SwingCo
         if ( button != null )
         {
             // Preserve old borders
-            if ( SwingUtils.isPreserveBorders ( button ) )
-            {
-                return;
-            }
+            //            if ( SwingUtils.isPreserveBorders ( button ) )
+            //            {
+            //                return;
+            //            }
 
             // Installing newly created border
             button.setBorder ( LafUtils.createWebBorder ( getBorderInsets () ) );
@@ -781,6 +787,11 @@ public class WebButtonUI extends BasicButtonUI implements ShapeProvider, SwingCo
         this.drawBottomLine = bottom;
         this.drawRightLine = right;
         updateBorder ();
+    }
+
+    public boolean isRollover ()
+    {
+        return rollover;
     }
 
     @Override

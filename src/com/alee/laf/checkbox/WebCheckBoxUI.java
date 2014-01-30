@@ -145,7 +145,7 @@ public class WebCheckBoxUI extends BasicCheckBoxUI implements ShapeProvider
 
         // Default settings
         SwingUtils.setOrientation ( checkBox );
-        LookAndFeel.installProperty( checkBox, "opaque", Boolean.FALSE );
+        LookAndFeel.installProperty ( checkBox, WebLookAndFeel.OPAQUE_PROPERTY, Boolean.FALSE );
         checkBox.setIcon ( createIcon () );
         setAnimated ( isAnimatedByDefault () );
         updateBorder ();

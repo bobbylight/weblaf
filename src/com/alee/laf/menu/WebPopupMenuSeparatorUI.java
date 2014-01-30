@@ -17,6 +17,7 @@
 
 package com.alee.laf.menu;
 
+import com.alee.laf.WebLookAndFeel;
 import com.alee.utils.LafUtils;
 
 import javax.swing.*;
@@ -47,7 +48,7 @@ public class WebPopupMenuSeparatorUI extends BasicPopupMenuSeparatorUI
      * @param c component that will use UI instance
      * @return instance of the WebPopupMenuSeparatorUI
      */
-    @SuppressWarnings ( "UnusedParameters" )
+    @SuppressWarnings ("UnusedParameters")
     public static ComponentUI createUI ( final JComponent c )
     {
         return new WebPopupMenuSeparatorUI ();
@@ -62,7 +63,7 @@ public class WebPopupMenuSeparatorUI extends BasicPopupMenuSeparatorUI
     public void installUI ( final JComponent c )
     {
         super.installUI ( c );
-        LookAndFeel.installProperty( c, "opaque", Boolean.FALSE );
+        LookAndFeel.installProperty ( c, WebLookAndFeel.OPAQUE_PROPERTY, Boolean.FALSE );
     }
 
     /**

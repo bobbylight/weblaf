@@ -190,6 +190,9 @@ public class AsyncTreeModel<E extends AsyncUniqueNode> extends WebTreeModel<E>
             // Retrieving and caching root node
             rootNode = dataProvider.getRoot ();
 
+            // Caching root node by ID
+            cacheNodeById ( rootNode );
+
             // Adding image observer
             registerObserver ( rootNode );
         }
@@ -350,6 +353,19 @@ public class AsyncTreeModel<E extends AsyncUniqueNode> extends WebTreeModel<E>
             {
                 clearNodeChildsCache ( node, clearNodes );
             }
+        }
+    }
+
+    /**
+     * Caches node by its IDs.
+     *
+     * @param node node to cache
+     */
+    protected void cacheNodeById ( final E node )
+    {
+        synchronized ( cacheLock )
+        {
+            nodeById.put ( node.getId (), node );
         }
     }
 
@@ -1102,9 +1118,9 @@ public class AsyncTreeModel<E extends AsyncUniqueNode> extends WebTreeModel<E>
      *
      * @param nodes nodes
      */
-    protected void registerObservers ( final E[] children )
+    protected void registerObservers ( final E[] nodes )
     {
-        for ( final E newChild : children )
+        for ( final E newChild : nodes )
         {
             registerObserver ( newChild );
         }

@@ -17,6 +17,7 @@
 
 package com.alee.laf.table;
 
+import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.table.editors.WebBooleanEditor;
 import com.alee.laf.table.editors.WebGenericEditor;
 import com.alee.laf.table.editors.WebNumberEditor;
@@ -68,7 +69,7 @@ public class WebTableUI extends BasicTableUI
 
         // Default settings
         SwingUtils.setOrientation ( table );
-        LookAndFeel.installProperty( table, "opaque", Boolean.FALSE );
+        LookAndFeel.installProperty ( table, WebLookAndFeel.OPAQUE_PROPERTY, Boolean.FALSE );
         table.setFillsViewportHeight ( false );
         table.setBackground ( WebTableStyle.background );
         table.setForeground ( WebTableStyle.foreground );
@@ -79,6 +80,7 @@ public class WebTableUI extends BasicTableUI
         table.setShowVerticalLines ( WebTableStyle.showVerticalLines );
         table.setIntercellSpacing ( WebTableStyle.cellsSpacing );
 
+        // todo Save and restore old renderers/editors on uninstall
         // Configuring default renderers
         table.setDefaultRenderer ( Object.class, new WebTableCellRenderer () );
         table.setDefaultRenderer ( Number.class, new WebNumberRenderer () );
